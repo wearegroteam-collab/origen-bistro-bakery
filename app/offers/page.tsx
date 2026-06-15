@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { getSiteContent } from "@/lib/content";
-import { offerHref } from "@/lib/utils";
 import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
 import { buildPageMetadata } from "@/lib/seo";
+import { offerPath } from "@/lib/i18n";
 
 export async function generateMetadata() {
   return buildPageMetadata("offers", "en");
@@ -25,7 +25,7 @@ export default async function OffersPage() {
                 <h2 className="mt-3 font-title text-4xl">{offer.title}</h2>
                 <p className="mt-4 leading-7 text-ink/70">{offer.description}</p>
                 <div className="mt-7">
-                  <CtaLink href={offerHref(offer)}>{offer.button_label || "Ver oferta"}</CtaLink>
+                  <CtaLink href={offerPath(offer, "en")}>{offer.button_label_en || offer.button_label || "View offer"}</CtaLink>
                 </div>
               </div>
             </article>

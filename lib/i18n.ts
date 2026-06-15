@@ -71,7 +71,7 @@ export function pick<T extends Record<string, unknown>>(item: T, field: string, 
 }
 
 export function localizedSlug(item: { slug?: string | null; slug_en?: string | null; slug_es?: string | null; id: string }, lang: Lang) {
-  return (lang === "es" ? item.slug_es : item.slug_en) || item.slug || item.id;
+  return (lang === "es" ? item.slug_es : item.slug_en) || item.slug || "";
 }
 
 export function pagePath(key: string, lang: Lang) {
@@ -87,11 +87,13 @@ export function pagePath(key: string, lang: Lang) {
 }
 
 export function offerPath(item: { slug?: string | null; slug_en?: string | null; slug_es?: string | null; id: string }, lang: Lang) {
-  return `${pagePath("offers", lang)}/${localizedSlug(item, lang)}`;
+  const slug = localizedSlug(item, lang);
+  return slug ? `${pagePath("offers", lang)}/${slug}` : pagePath("offers", lang);
 }
 
 export function eventPath(item: { slug?: string | null; slug_en?: string | null; slug_es?: string | null; id: string }, lang: Lang) {
-  return `${pagePath("events", lang)}/${localizedSlug(item, lang)}`;
+  const slug = localizedSlug(item, lang);
+  return slug ? `${pagePath("events", lang)}/${slug}` : pagePath("events", lang);
 }
 
 export function alternatePath(pathKey: string, currentLang: Lang) {

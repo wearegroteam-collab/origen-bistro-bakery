@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { getSiteContent } from "@/lib/content";
-import { eventHref } from "@/lib/utils";
 import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
 import { buildPageMetadata } from "@/lib/seo";
+import { eventPath } from "@/lib/i18n";
 
 export async function generateMetadata() {
   return buildPageMetadata("events", "en");
@@ -30,7 +30,7 @@ export default async function EventsPage() {
                 <h2 className="mt-4 font-title text-4xl">{event.title}</h2>
                 <p className="mt-4 leading-7 text-ink/70">{event.description}</p>
                 <div className="mt-7">
-                  <CtaLink href={eventHref(event)}>{event.button_label || "Ver evento"}</CtaLink>
+                  <CtaLink href={eventPath(event, "en")}>{event.button_label_en || event.button_label || "View event"}</CtaLink>
                 </div>
               </div>
             </article>

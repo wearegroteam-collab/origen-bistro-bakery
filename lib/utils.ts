@@ -28,9 +28,9 @@ export function safeHref(value?: string | null, fallback = "/") {
 }
 
 export function offerHref(offer: { slug?: string | null; id: string }) {
-  return `/offers/${offer.slug || offer.id}`;
+  return offer.slug ? `/offers/${offer.slug}` : "/offers";
 }
 
 export function eventHref(event: { slug?: string | null; id: string }) {
-  return `/events/${event.slug || event.id}`;
+  return event.slug ? `/events/${event.slug}` : "/events";
 }

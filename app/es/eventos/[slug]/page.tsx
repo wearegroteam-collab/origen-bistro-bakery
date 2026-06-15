@@ -1,15 +1,15 @@
 import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
-import { notFound } from "next/navigation";
 import { getEventBySlug, getSiteContent } from "@/lib/content";
 import { pick } from "@/lib/i18n";
 import { safeHref } from "@/lib/utils";
 import { CtaLink, PageShell } from "@/components/site-chrome";
+import { ContentNotFound } from "@/components/content-not-found";
 
 export default async function SpanishEventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [content, event] = await Promise.all([getSiteContent(), getEventBySlug(slug)]);
-  if (!event) notFound();
+  if (!event) return <ContentNotFound brand={content.brand} orderPlatforms={content.orderPlatforms} lang="es" type="event" />;
   return (
     <PageShell brand={content.brand} lang="es" orderPlatforms={content.orderPlatforms}>
       <section className="section-shell py-16">

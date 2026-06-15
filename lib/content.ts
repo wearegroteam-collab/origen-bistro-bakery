@@ -64,28 +64,49 @@ export async function getSiteContent(): Promise<SiteContent> {
 
 export async function getOfferBySlug(slug: string): Promise<Offer | null> {
   if (!hasSupabaseEnv()) {
-    return fallbackContent.offers.find((offer) => offer.slug === slug || offer.id === slug) ?? null;
+    return fallbackContent.offers.find((offer) => offer.slug === slug || offer.slug_en === slug || offer.slug_es === slug || offer.id === slug) ?? null;
   }
 
   const supabase = await createSupabaseServerClient();
   const today = new Date().toISOString().slice(0, 10);
-  const { data } = await supabase
+  const query = supabase
     .from("offers")
     .select("*")
     .or(`slug.eq.${slug},slug_en.eq.${slug},slug_es.eq.${slug}`)
     .eq("is_active", true)
     .or(`start_date.is.null,start_date.lte.${today}`)
+    .or(`end_date.is.null,end_date.gte.${today}`);
+  const { data } = await query.maybeSingle();
+
+  if (data) return data;
+  if (!isUuid(slug)) return null;
+
+  const { data: dataById } = await supabase
+    .from("offers")
+    .select("*")
+    .eq("id", slug)
+    .eq("is_active", true)
+    .or(`start_date.is.null,start_date.lte.${today}`)
     .or(`end_date.is.null,end_date.gte.${today}`)
-    .single();
-  return data ?? null;
+    .maybeSingle();
+  return dataById ?? null;
 }
 
 export async function getEventBySlug(slug: string): Promise<EventItem | null> {
   if (!hasSupabaseEnv()) {
-    return fallbackContent.events.find((event) => event.slug === slug || event.id === slug) ?? null;
+    return fallbackContent.events.find((event) => event.slug === slug || event.slug_en === slug || event.slug_es === slug || event.id === slug) ?? null;
   }
 
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.from("events").select("*").or(`slug.eq.${slug},slug_en.eq.${slug},slug_es.eq.${slug}`).eq("is_active", true).single();
-  return data ?? null;
+  const { data } = await supabase.from("events").select("*").or(`slug.eq.${slug},slug_en.eq.${slug},slug_es.eq.${slug}`).eq("is_active", true).maybeSingle();
+
+  if (data) return data;
+  if (!isUuid(slug)) return null;
+
+  const { data: dataById } = await supabase.from("events").select("*").eq("id", slug).eq("is_active", true).maybeSingle();
+  return dataById ?? null;
+}
+
+function isUuid(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }

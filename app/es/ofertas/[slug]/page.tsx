@@ -1,15 +1,15 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { getOfferBySlug, getSiteContent } from "@/lib/content";
 import { pick } from "@/lib/i18n";
 import { safeHref } from "@/lib/utils";
 import { CtaLink, PageShell } from "@/components/site-chrome";
 import { OrderOnlineButton } from "@/components/order-online";
+import { ContentNotFound } from "@/components/content-not-found";
 
 export default async function SpanishOfferDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [content, offer] = await Promise.all([getSiteContent(), getOfferBySlug(slug)]);
-  if (!offer) notFound();
+  if (!offer) return <ContentNotFound brand={content.brand} orderPlatforms={content.orderPlatforms} lang="es" type="offer" />;
   return (
     <PageShell brand={content.brand} lang="es" orderPlatforms={content.orderPlatforms}>
       <section className="section-shell py-16"><div className="overflow-hidden rounded-[2.5rem] bg-white shadow-soft">

@@ -1,0 +1,272 @@
+export type BrandSettings = {
+  id?: string;
+  logo_url?: string | null;
+  secondary_logo_url?: string | null;
+  favicon_url?: string | null;
+  primary_color: string;
+  accent_color: string;
+  phone?: string | null;
+  whatsapp?: string | null;
+  email?: string | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  tiktok?: string | null;
+  address?: string | null;
+  address_en?: string | null;
+  address_es?: string | null;
+  google_maps_embed?: string | null;
+  hours?: string | null;
+  hours_en?: string | null;
+  hours_es?: string | null;
+};
+
+export type HeroContent = {
+  id?: string;
+  media_url?: string | null;
+  media_type: "image" | "video";
+  title: string;
+  title_en?: string | null;
+  title_es?: string | null;
+  subtitle: string;
+  subtitle_en?: string | null;
+  subtitle_es?: string | null;
+  primary_button_label: string;
+  primary_button_label_en?: string | null;
+  primary_button_label_es?: string | null;
+  primary_button_url: string;
+  secondary_button_label: string;
+  secondary_button_label_en?: string | null;
+  secondary_button_label_es?: string | null;
+  secondary_button_url: string;
+};
+
+export type Offer = {
+  id: string;
+  slug?: string | null;
+  slug_en?: string | null;
+  slug_es?: string | null;
+  title: string;
+  title_en?: string | null;
+  title_es?: string | null;
+  description?: string | null;
+  description_en?: string | null;
+  description_es?: string | null;
+  full_description?: string | null;
+  full_description_en?: string | null;
+  full_description_es?: string | null;
+  conditions?: string | null;
+  conditions_en?: string | null;
+  conditions_es?: string | null;
+  image_url?: string | null;
+  button_label?: string | null;
+  button_label_en?: string | null;
+  button_label_es?: string | null;
+  button_url?: string | null;
+  cta_label?: string | null;
+  cta_label_en?: string | null;
+  cta_label_es?: string | null;
+  cta_url?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  is_featured: boolean;
+  is_active: boolean;
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  name_en?: string | null;
+  name_es?: string | null;
+  slug: string;
+  slug_en?: string | null;
+  slug_es?: string | null;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type Product = {
+  id: string;
+  name: string;
+  name_en?: string | null;
+  name_es?: string | null;
+  description?: string | null;
+  description_en?: string | null;
+  description_es?: string | null;
+  price: number;
+  image_url?: string | null;
+  category_id?: string | null;
+  category?: Category | null;
+  is_available: boolean;
+  is_featured: boolean;
+};
+
+export type GalleryImage = {
+  id: string;
+  title?: string | null;
+  title_en?: string | null;
+  title_es?: string | null;
+  image_url: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type EventItem = {
+  id: string;
+  slug?: string | null;
+  slug_en?: string | null;
+  slug_es?: string | null;
+  title: string;
+  title_en?: string | null;
+  title_es?: string | null;
+  image_url?: string | null;
+  event_date?: string | null;
+  event_time?: string | null;
+  location?: string | null;
+  location_en?: string | null;
+  location_es?: string | null;
+  description?: string | null;
+  description_en?: string | null;
+  description_es?: string | null;
+  full_description?: string | null;
+  full_description_en?: string | null;
+  full_description_es?: string | null;
+  button_label?: string | null;
+  button_label_en?: string | null;
+  button_label_es?: string | null;
+  button_url?: string | null;
+  cta_label?: string | null;
+  cta_label_en?: string | null;
+  cta_label_es?: string | null;
+  cta_url?: string | null;
+  is_featured: boolean;
+  is_active: boolean;
+};
+
+export type Testimonial = {
+  id: string;
+  name: string;
+  name_en?: string | null;
+  name_es?: string | null;
+  comment: string;
+  comment_en?: string | null;
+  comment_es?: string | null;
+  photo_url?: string | null;
+  rating: number;
+  is_active: boolean;
+};
+
+export type AboutContent = {
+  id?: string;
+  title: string;
+  title_en?: string | null;
+  title_es?: string | null;
+  body: string;
+  body_en?: string | null;
+  body_es?: string | null;
+  image_url?: string | null;
+  preview_title?: string | null;
+  preview_title_en?: string | null;
+  preview_title_es?: string | null;
+  preview_body?: string | null;
+  preview_body_en?: string | null;
+  preview_body_es?: string | null;
+  page_title?: string | null;
+  page_title_en?: string | null;
+  page_title_es?: string | null;
+  page_body?: string | null;
+  page_body_en?: string | null;
+  page_body_es?: string | null;
+  secondary_image_url?: string | null;
+  values?: string | null;
+  values_en?: string | null;
+  values_es?: string | null;
+  cta_label?: string | null;
+  cta_label_en?: string | null;
+  cta_label_es?: string | null;
+  cta_url?: string | null;
+};
+
+export type SeoSettings = {
+  id?: string;
+  site_title_en?: string | null;
+  site_title_es?: string | null;
+  site_description_en?: string | null;
+  site_description_es?: string | null;
+  default_og_image?: string | null;
+  business_name?: string | null;
+  business_type?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  city?: string | null;
+  province?: string | null;
+  country?: string | null;
+  postal_code?: string | null;
+  google_maps_url?: string | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  tiktok?: string | null;
+  latitude?: string | null;
+  longitude?: string | null;
+  price_range?: string | null;
+  cuisine?: string | null;
+  accepts_reservations?: boolean | null;
+  opening_hours_schema?: string | null;
+};
+
+export type SeoPage = {
+  id: string;
+  page_key: string;
+  meta_title_en?: string | null;
+  meta_title_es?: string | null;
+  meta_description_en?: string | null;
+  meta_description_es?: string | null;
+  og_title_en?: string | null;
+  og_title_es?: string | null;
+  og_description_en?: string | null;
+  og_description_es?: string | null;
+  og_image?: string | null;
+  keywords_en?: string | null;
+  keywords_es?: string | null;
+  canonical_url?: string | null;
+  index_page: boolean;
+  follow_page: boolean;
+};
+
+export type LocalSeoBlock = {
+  id: string;
+  page_target: string;
+  heading_en?: string | null;
+  heading_es?: string | null;
+  content_en?: string | null;
+  content_es?: string | null;
+  keywords?: string | null;
+  is_active: boolean;
+};
+
+export type OrderPlatform = {
+  id: string;
+  name: string;
+  logo_url?: string | null;
+  order_url: string;
+  button_text_en?: string | null;
+  button_text_es?: string | null;
+  is_active: boolean;
+  sort_order: number;
+};
+
+export type SiteContent = {
+  brand: BrandSettings;
+  hero: HeroContent;
+  about: AboutContent;
+  offers: Offer[];
+  categories: Category[];
+  products: Product[];
+  gallery: GalleryImage[];
+  events: EventItem[];
+  testimonials: Testimonial[];
+  seoSettings: SeoSettings;
+  seoPages: SeoPage[];
+  localSeoBlocks: LocalSeoBlock[];
+  orderPlatforms: OrderPlatform[];
+};

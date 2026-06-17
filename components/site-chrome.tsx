@@ -24,14 +24,15 @@ function navItems(lang: Lang) {
 
 export function SiteHeader({ brand, lang = "en", orderPlatforms = [] }: { brand: BrandSettings; lang?: Lang; orderPlatforms?: OrderPlatform[] }) {
   const alternateHome = lang === "en" ? "/es" : "/";
+  const copy = t(lang);
   return (
     <header className="sticky top-0 z-50 border-b border-white/70 bg-seashell/90 backdrop-blur">
-      <div className="section-shell flex h-20 items-center justify-between">
-        <Link href={pagePath("home", lang)} className="flex items-center gap-3">
+      <div className="section-shell flex h-20 items-center justify-between gap-3">
+        <Link href={pagePath("home", lang)} className="flex min-w-0 items-center gap-3">
           {brand.logo_url ? (
             <Image src={brand.logo_url} alt="Origen Bistro & Bakery" width={132} height={48} className="max-h-12 w-auto" />
           ) : (
-            <span className="font-title text-3xl text-ink">Origen</span>
+            <span className="truncate font-title text-3xl text-ink">Origen</span>
           )}
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-ink/70 lg:flex">
@@ -49,7 +50,15 @@ export function SiteHeader({ brand, lang = "en", orderPlatforms = [] }: { brand:
         <div className="hidden lg:block">
           <OrderOnlineButton platforms={orderPlatforms} lang={lang} />
         </div>
-        <MobileNav items={navItems(lang)} lang={lang} orderPlatforms={orderPlatforms} />
+        <div className="flex shrink-0 items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1 text-xs font-bold">
+            <Link href="/" className={lang === "en" ? "text-ink" : "text-ink/40"}>EN</Link>
+            <span className="text-ink/25">/</span>
+            <Link href={alternateHome} className={lang === "es" ? "text-ink" : "text-ink/40"}>ES</Link>
+          </div>
+          <OrderOnlineButton platforms={orderPlatforms} lang={lang} variant="icon" label={copy.orderOnline} />
+          <MobileNav items={navItems(lang)} lang={lang} orderPlatforms={orderPlatforms} />
+        </div>
       </div>
     </header>
   );

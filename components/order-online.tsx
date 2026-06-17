@@ -51,7 +51,7 @@ export function OrderOnlineProvider({ platforms, lang = "en", children }: { plat
   );
 }
 
-export function OrderOnlineButton({ platforms, lang = "en", variant = "dark", label }: { platforms?: OrderPlatform[]; lang?: Lang; variant?: "dark" | "light" | "outline" | "glass" | "small"; label?: string }) {
+export function OrderOnlineButton({ platforms, lang = "en", variant = "dark", label }: { platforms?: OrderPlatform[]; lang?: Lang; variant?: "dark" | "light" | "outline" | "glass" | "small" | "icon"; label?: string }) {
   const context = useContext(OrderOnlineContext);
   const copy = t(context?.lang || lang);
   const active = context?.platforms || platforms?.filter((platform) => platform.is_active) || [];
@@ -60,14 +60,16 @@ export function OrderOnlineButton({ platforms, lang = "en", variant = "dark", la
     light: "bg-ochre text-white hover:bg-ink",
     outline: "border border-pastel text-ink hover:bg-white",
     glass: "border border-white/70 bg-white/10 text-white hover:bg-white hover:text-ink",
-    small: "border border-pastel bg-white px-4 py-2 text-ink hover:bg-cultured"
+    small: "border border-pastel bg-white px-4 py-2 text-ink hover:bg-cultured",
+    icon: "h-11 w-11 justify-center bg-ink p-0 text-white hover:bg-spanish"
   };
 
   if (!active.length) return null;
 
   return (
-    <button type="button" onClick={() => context?.openModal()} className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition ${classes[variant]}`}>
-      <ShoppingBag size={18} /> {label || copy.orderOnline}
+    <button type="button" onClick={() => context?.openModal()} className={`inline-flex items-center gap-2 rounded-full text-sm font-bold transition ${variant === "icon" ? "" : "px-6 py-3"} ${classes[variant]}`} aria-label={copy.orderOnline}>
+      <ShoppingBag size={18} />
+      {variant === "icon" ? <span className="sr-only">{copy.orderOnline}</span> : label || copy.orderOnline}
     </button>
   );
 }

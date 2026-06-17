@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
@@ -15,7 +16,12 @@ type NavItem = {
 
 export function MobileNav({ items, lang, orderPlatforms }: { items: NavItem[]; lang: Lang; orderPlatforms: OrderPlatform[] }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const copy = t(lang);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -23,10 +29,11 @@ export function MobileNav({ items, lang, orderPlatforms }: { items: NavItem[]; l
       if (event.key === "Escape") setOpen(false);
     }
     document.addEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
     };
   }, [open]);
 
@@ -36,17 +43,17 @@ export function MobileNav({ items, lang, orderPlatforms }: { items: NavItem[]; l
         <Menu size={22} />
       </button>
 
-      {open && (
-        <div className="fixed inset-0 z-[9998] bg-ink/45 backdrop-blur-sm" onMouseDown={() => setOpen(false)}>
-          <div className="ml-auto flex h-full w-[min(420px,calc(100%-32px))] flex-col bg-seashell p-6 shadow-soft" onMouseDown={(event) => event.stopPropagation()}>
+      {mounted && open && createPortal(
+        <div className="fixed inset-0 z-[9998] bg-ink/45 backdrop-blur-sm" onMouseDown={() => setOpen(false)} role="dialog" aria-modal="true">
+          <div className="ml-auto flex h-full w-[min(430px,calc(100%-24px))] flex-col overflow-y-auto bg-seashell p-7 shadow-soft" onMouseDown={(event) => event.stopPropagation()}>
             <div className="flex items-center justify-between">
-              <p className="font-title text-3xl">Origen</p>
-              <button type="button" onClick={() => setOpen(false)} className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink" aria-label="Close menu">
+              <p className="font-title text-4xl text-ink">Origen</p>
+              <button type="button" onClick={() => setOpen(false)} className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink shadow-soft" aria-label="Close menu">
                 <X size={20} />
               </button>
             </div>
 
-            <nav className="mt-10 flex flex-col gap-5 text-2xl font-heading">
+            <nav className="mt-12 flex flex-col gap-5 text-3xl font-heading">
               {items.map((item) => (
                 <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="text-ink transition hover:text-spanish">
                   {item.label}
@@ -54,7 +61,7 @@ export function MobileNav({ items, lang, orderPlatforms }: { items: NavItem[]; l
               ))}
             </nav>
 
-            <div className="mt-10 flex items-center gap-3 text-sm font-bold">
+            <div className="mt-10 flex items-center gap-3 text-base font-bold">
               <Link href="/" onClick={() => setOpen(false)} className={lang === "en" ? "text-ink" : "text-ink/45"}>EN</Link>
               <span className="text-ink/25">/</span>
               <Link href={pagePath("home", "es")} onClick={() => setOpen(false)} className={lang === "es" ? "text-ink" : "text-ink/45"}>ES</Link>
@@ -64,7 +71,8 @@ export function MobileNav({ items, lang, orderPlatforms }: { items: NavItem[]; l
               <OrderOnlineButton platforms={orderPlatforms} lang={lang} label={copy.orderOnline} />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

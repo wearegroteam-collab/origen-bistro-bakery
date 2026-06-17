@@ -1,9 +1,10 @@
 import Image from "next/image";
-import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
+import { CtaLink, InternalPageHero, PageShell } from "@/components/site-chrome";
 import { OrderPlatformStrip } from "@/components/order-online";
 import { pagePath, pick, t, type Lang } from "@/lib/i18n";
 import type { SiteContent } from "@/types/content";
 import { whatsappUrl } from "@/lib/utils";
+import { pageHero } from "@/lib/page-heroes";
 
 export function CateringPageView({ content, lang = "en" }: { content: SiteContent; lang?: Lang }) {
   const copy = t(lang);
@@ -19,7 +20,7 @@ export function CateringPageView({ content, lang = "en" }: { content: SiteConten
 
   return (
     <PageShell brand={brand} lang={lang} orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow={copy.cateringEyebrow} title={title} body={subtitle} image={catering.hero_image_url || catering.image_url} />
+      <InternalPageHero hero={pageHero(content, "catering")} pageKey="catering" lang={lang} eyebrow={copy.cateringEyebrow} />
 
       <section className="section-shell py-24">
         <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">

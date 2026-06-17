@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { getSiteContent } from "@/lib/content";
-import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
+import { CtaLink, InternalPageHero, PageShell } from "@/components/site-chrome";
 import { buildPageMetadata } from "@/lib/seo";
 import { pick } from "@/lib/i18n";
+import { pageHero } from "@/lib/page-heroes";
 
 export async function generateMetadata() {
   return buildPageMetadata("about", "en");
@@ -17,7 +18,7 @@ export default async function AboutPage() {
 
   return (
     <PageShell brand={brand} orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow="About" title={pick(about as unknown as Record<string, unknown>, "page_title", "en") || pick(about as unknown as Record<string, unknown>, "title", "en")} body={pick(about as unknown as Record<string, unknown>, "preview_body", "en")} image={about.image_url} />
+      <InternalPageHero hero={pageHero(content, "about")} pageKey="about" lang="en" eyebrow="About" />
       <section className="section-shell py-24">
         <div className="grid gap-12 md:grid-cols-[1fr_0.9fr] md:items-start">
           <div>

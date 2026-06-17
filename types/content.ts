@@ -283,6 +283,26 @@ export type OrderPlatform = {
   sort_order: number;
 };
 
+export type PageHeroConfig = {
+  id: string;
+  page_key: string;
+  is_enabled: boolean;
+  background_image_url?: string | null;
+  background_video_url?: string | null;
+  title_en?: string | null;
+  title_es?: string | null;
+  subtitle_en?: string | null;
+  subtitle_es?: string | null;
+  overlay_opacity: number;
+  height: "small" | "medium" | "large";
+  hero_style?: "large" | "medium" | "compact" | "none" | null;
+  image_position?: string | null;
+  cta_label_en?: string | null;
+  cta_label_es?: string | null;
+  cta_url?: string | null;
+  show_cta: boolean;
+};
+
 export type SiteContent = {
   brand: BrandSettings;
   hero: HeroContent;
@@ -298,4 +318,5 @@ export type SiteContent = {
   seoPages: SeoPage[];
   localSeoBlocks: LocalSeoBlock[];
   orderPlatforms: OrderPlatform[];
+  pageHeroes: PageHeroConfig[];
 };

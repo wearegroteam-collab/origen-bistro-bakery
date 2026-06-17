@@ -9,7 +9,7 @@ import { slugify } from "@/lib/utils";
 
 type FieldType = "text" | "textarea" | "number" | "date" | "checkbox" | "image" | "select";
 type Field = { name: string; label: string; type?: FieldType; required?: boolean; options?: { label: string; value: string }[] };
-type SectionKey = "brand" | "hero" | "about" | "catering" | "offers" | "categories" | "products" | "gallery" | "events" | "testimonials" | "seoSettings" | "seoPages" | "localSeoBlocks" | "orderPlatforms";
+type SectionKey = "brand" | "hero" | "pageHeroes" | "about" | "catering" | "offers" | "categories" | "products" | "gallery" | "events" | "testimonials" | "seoSettings" | "seoPages" | "localSeoBlocks" | "orderPlatforms";
 
 const singleTables: Record<string, string> = {
   brand: "brand_settings",
@@ -28,12 +28,14 @@ const collectionTables: Record<string, string> = {
   testimonials: "testimonials",
   seoPages: "seo_pages",
   localSeoBlocks: "local_seo_blocks",
-  orderPlatforms: "order_platforms"
+  orderPlatforms: "order_platforms",
+  pageHeroes: "page_heroes"
 };
 
 const tabs: { key: SectionKey; label: string }[] = [
   { key: "brand", label: "Marca" },
   { key: "hero", label: "Hero" },
+  { key: "pageHeroes", label: "Page Heroes" },
   { key: "offers", label: "Ofertas" },
   { key: "categories", label: "Categorias" },
   { key: "products", label: "Menu" },
@@ -80,6 +82,35 @@ const fieldMap: Record<SectionKey, Field[]> = {
     { name: "secondary_button_label_en", label: "Texto boton secundario EN" },
     { name: "secondary_button_label_es", label: "Boton secundario ES" },
     { name: "secondary_button_url", label: "Enlace secundario", required: true }
+  ],
+  pageHeroes: [
+    { name: "page_key", label: "Pagina", type: "select", required: true, options: [
+      { label: "Offers", value: "offers" },
+      { label: "Events", value: "events" },
+      { label: "Catering", value: "catering" },
+      { label: "About", value: "about" },
+      { label: "Contact", value: "contact" },
+      { label: "Menu", value: "menu" }
+    ] },
+    { name: "is_enabled", label: "Activar hero", type: "checkbox" },
+    { name: "background_image_url", label: "Imagen de fondo", type: "image" },
+    { name: "background_video_url", label: "Video de fondo opcional", type: "image" },
+    { name: "title_en", label: "Titulo EN" },
+    { name: "title_es", label: "Titulo ES" },
+    { name: "subtitle_en", label: "Subtitulo EN", type: "textarea" },
+    { name: "subtitle_es", label: "Subtitulo ES", type: "textarea" },
+    { name: "overlay_opacity", label: "Overlay opacity 0-100", type: "number" },
+    { name: "hero_style", label: "Hero Style", type: "select", options: [
+      { label: "Large", value: "large" },
+      { label: "Medium", value: "medium" },
+      { label: "Compact", value: "compact" },
+      { label: "None", value: "none" }
+    ] },
+    { name: "image_position", label: "Posicion de imagen" },
+    { name: "show_cta", label: "Mostrar CTA", type: "checkbox" },
+    { name: "cta_label_en", label: "Texto CTA EN" },
+    { name: "cta_label_es", label: "Texto CTA ES" },
+    { name: "cta_url", label: "Enlace CTA" }
   ],
   about: [
     { name: "preview_title_en", label: "Titulo preview EN" },
@@ -274,6 +305,7 @@ const emptyBySection: Partial<Record<SectionKey, Record<string, unknown>>> = {
   events: { title_en: "", title_es: "", slug_en: "", slug_es: "", image_url: "", event_date: "", event_time: "", location_en: "", location_es: "", description_en: "", description_es: "", full_description_en: "", full_description_es: "", button_label_en: "View event", button_label_es: "Ver evento", button_url: "", cta_label_en: "Reserve", cta_label_es: "Reservar", cta_url: "/contact", is_featured: false, is_active: true },
   testimonials: { name_en: "", name_es: "", comment_en: "", comment_es: "", photo_url: "", rating: 5, is_active: true },
   catering: { hero_image_url: "", title_en: "", title_es: "", subtitle_en: "", subtitle_es: "", description_en: "", description_es: "", image_url: "", gallery_urls: "", service_types_en: "", service_types_es: "", packages_en: "", packages_es: "", cta_label_en: "", cta_label_es: "", cta_url: "/contact", whatsapp_cta: "", is_active: true },
+  pageHeroes: { page_key: "offers", is_enabled: true, background_image_url: "", background_video_url: "", title_en: "", title_es: "", subtitle_en: "", subtitle_es: "", overlay_opacity: 65, hero_style: "medium", height: "medium", image_position: "center", show_cta: false, cta_label_en: "", cta_label_es: "", cta_url: "" },
   seoPages: { page_key: "", index_page: true, follow_page: true },
   localSeoBlocks: { page_target: "home", heading_en: "", heading_es: "", content_en: "", content_es: "", keywords: "", is_active: true },
   orderPlatforms: { name: "", logo_url: "", order_url: "", button_text_en: "", button_text_es: "", sort_order: 0, is_active: true }
@@ -476,8 +508,8 @@ export function AdminPanel({ initialData, hasSupabase, initialSection = "brand" 
                   <tbody>
                     {list.map((record) => (
                       <tr key={String(record.id)} className="bg-cultured">
-                        <td className="rounded-l-xl px-4 py-3 font-bold">{String(record.title || record.name || "Sin titulo")}</td>
-                        <td className="px-4 py-3 text-ink/60">{String(record.description || record.comment || record.slug || record.event_date || "")}</td>
+                        <td className="rounded-l-xl px-4 py-3 font-bold">{String(record.title || record.title_en || record.name || record.page_key || "Sin titulo")}</td>
+                        <td className="px-4 py-3 text-ink/60">{String(record.description || record.subtitle_en || record.comment || record.slug || record.event_date || "")}</td>
                         <td className="px-4 py-3 text-ink/60">{record.is_active === false || record.is_available === false ? "Inactivo" : "Activo"}</td>
                         <td className="rounded-r-xl px-4 py-3 text-right">
                           <button type="button" onClick={() => editRecord(record)} className="mr-2 rounded-full bg-white px-4 py-2 font-bold">Editar</button>
@@ -571,6 +603,13 @@ function normalizePayload(form: Record<string, unknown>, section: SectionKey) {
     payload.slug_en = firstText(payload.slug_en, slugify(String(firstText(payload.name_en, name))));
     payload.slug_es = firstText(payload.slug_es, slugify(String(firstText(payload.name_es, name))));
     payload.slug = firstText(payload.slug, payload.slug_en, payload.slug_es, slugify(String(name)));
+  }
+
+  if (section === "pageHeroes") {
+    payload.overlay_opacity = Math.min(100, Math.max(0, Number(payload.overlay_opacity ?? 65)));
+    payload.hero_style = firstText(payload.hero_style, "medium");
+    payload.height = firstText(payload.height, "medium");
+    payload.image_position = firstText(payload.image_position, "center");
   }
 
   return payload;

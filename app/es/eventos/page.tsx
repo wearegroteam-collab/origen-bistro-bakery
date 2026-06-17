@@ -3,7 +3,8 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import { getSiteContent } from "@/lib/content";
 import { eventPath, pick } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/seo";
-import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
+import { CtaLink, InternalPageHero, PageShell } from "@/components/site-chrome";
+import { pageHero } from "@/lib/page-heroes";
 
 export async function generateMetadata() {
   return buildPageMetadata("events", "es");
@@ -14,7 +15,7 @@ export default async function SpanishEventsPage() {
   const { brand, events } = content;
   return (
     <PageShell brand={brand} lang="es" orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow="Eventos" title="Experiencias para vivir Origen" body="Catas, brunches especiales, talleres y encuentros." image="https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?auto=format&fit=crop&w=1800&q=85" />
+      <InternalPageHero hero={pageHero(content, "events")} pageKey="events" lang="es" eyebrow="Eventos" />
       <section className="section-shell py-20">
         <div className="grid gap-7 md:grid-cols-2">
           {events.map((event) => (

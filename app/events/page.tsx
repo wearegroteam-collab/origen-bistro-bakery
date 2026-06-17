@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { getSiteContent } from "@/lib/content";
-import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
+import { CtaLink, InternalPageHero, PageShell } from "@/components/site-chrome";
 import { buildPageMetadata } from "@/lib/seo";
 import { eventPath, pick } from "@/lib/i18n";
+import { pageHero } from "@/lib/page-heroes";
 
 export async function generateMetadata() {
   return buildPageMetadata("events", "en");
@@ -15,7 +16,7 @@ export default async function EventsPage() {
 
   return (
     <PageShell brand={brand} orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow="Events" title="Experiences to live Origen" body="Tastings, special brunches, workshops and gatherings managed from the admin panel." image="https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?auto=format&fit=crop&w=1800&q=85" />
+      <InternalPageHero hero={pageHero(content, "events")} pageKey="events" lang="en" eyebrow="Events" />
       <section className="section-shell py-20">
         <div className="grid gap-7 md:grid-cols-2">
           {events.map((event) => (

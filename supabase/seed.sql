@@ -288,6 +288,51 @@ set
   is_active = true,
   updated_at = now();
 
+-- Page Heroes
+insert into public.page_heroes (
+  page_key,
+  is_enabled,
+  background_image_url,
+  background_video_url,
+  title_en,
+  title_es,
+  subtitle_en,
+  subtitle_es,
+  overlay_opacity,
+  hero_style,
+  height,
+  image_position,
+  cta_label_en,
+  cta_label_es,
+  cta_url,
+  show_cta
+)
+values
+  ('offers', true, 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=1800&q=85', null, 'Active seasonal offers', 'Ofertas activas de temporada', 'Specials, bundles and limited releases from Origen Bistro & Bakery.', 'Especiales, combos y propuestas limitadas de Origen Bistro & Bakery.', 62, 'medium', 'medium', 'center', null, null, null, false),
+  ('events', true, 'https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?auto=format&fit=crop&w=1800&q=85', null, 'Experiences to live Origen', 'Experiencias para vivir Origen', 'Tastings, special brunches, workshops and gatherings.', 'Catas, brunches especiales, talleres y encuentros.', 62, 'medium', 'medium', 'center', null, null, null, false),
+  ('catering', true, 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1800&q=85', null, 'Catering by Origen', 'Catering de Origen', 'Bakery boxes, brunch spreads and bistro-style catering for thoughtful gatherings.', 'Bakery boxes, brunch y catering estilo bistro para reuniones especiales.', 65, 'medium', 'medium', 'center', 'Request catering', 'Solicitar catering', '/contact', true),
+  ('about', true, 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1800&q=85', null, 'Our story', 'Nuestra historia', 'Artisan bread, thoughtful coffee and bistro cooking built around honest ingredients.', 'Pan artesanal, cafe cuidado y cocina bistro alrededor de ingredientes honestos.', 65, 'medium', 'medium', 'center', null, null, null, false),
+  ('contact', true, 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1800&q=85', null, 'Reserve, message or stop by for coffee', 'Reserva, escribe o ven por cafe', 'Find location, hours, WhatsApp and social links for Origen Bistro & Bakery.', 'Encuentra ubicacion, horarios, WhatsApp y redes sociales de Origen Bistro & Bakery.', 62, 'medium', 'medium', 'center', null, null, null, false),
+  ('menu', true, 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1800&q=85', null, 'Bakery, brunch and seasonal bistro', 'Bakery, brunch y bistro de temporada', 'Explore our full menu organized by category.', 'Explora nuestro menu organizado por categorias.', 62, 'medium', 'medium', 'center', null, null, null, false)
+on conflict (page_key) do update
+set
+  is_enabled = excluded.is_enabled,
+  background_image_url = excluded.background_image_url,
+  background_video_url = excluded.background_video_url,
+  title_en = excluded.title_en,
+  title_es = excluded.title_es,
+  subtitle_en = excluded.subtitle_en,
+  subtitle_es = excluded.subtitle_es,
+  overlay_opacity = excluded.overlay_opacity,
+  hero_style = excluded.hero_style,
+  height = excluded.height,
+  image_position = excluded.image_position,
+  cta_label_en = excluded.cta_label_en,
+  cta_label_es = excluded.cta_label_es,
+  cta_url = excluded.cta_url,
+  show_cta = excluded.show_cta,
+  updated_at = now();
+
 -- Categories
 insert into public.categories (name, name_en, name_es, slug, slug_en, slug_es, sort_order, is_active)
 values

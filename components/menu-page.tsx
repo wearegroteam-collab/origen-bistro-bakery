@@ -2,17 +2,18 @@ import Image from "next/image";
 import type { Lang } from "@/lib/i18n";
 import { pick } from "@/lib/i18n";
 import { formatPrice } from "@/lib/utils";
-import { PageHero, PageShell } from "@/components/site-chrome";
+import { InternalPageHero, PageShell } from "@/components/site-chrome";
 import type { SiteContent } from "@/types/content";
 import { OrderOnlineButton, OrderPlatformStrip } from "@/components/order-online";
 import { t } from "@/lib/i18n";
+import { pageHero } from "@/lib/page-heroes";
 
 export function MenuPageView({ content, lang }: { content: SiteContent; lang: Lang }) {
   const { brand, categories, products } = content;
   const copy = t(lang);
   return (
     <PageShell brand={brand} lang={lang} orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow={lang === "es" ? "Menu completo" : "Full menu"} title={lang === "es" ? "Bakery, brunch y bistro de temporada" : "Bakery, brunch and seasonal bistro"} body={lang === "es" ? "Explora nuestro menu organizado por categorias." : "Explore our full menu organized by category."} image="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1800&q=85" />
+      <InternalPageHero hero={pageHero(content, "menu")} pageKey="menu" lang={lang} eyebrow={lang === "es" ? "Menu completo" : "Full menu"} />
       <section className="section-shell pt-16">
         <OrderPlatformStrip platforms={content.orderPlatforms} lang={lang} />
       </section>

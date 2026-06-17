@@ -22,7 +22,8 @@ export async function getSiteContent(): Promise<SiteContent> {
     seoSettings,
     seoPages,
     localSeoBlocks,
-    orderPlatforms
+    orderPlatforms,
+    pageHeroes
   ] = await Promise.all([
     supabase.from("brand_settings").select("*").single(),
     supabase.from("hero_content").select("*").single(),
@@ -44,7 +45,8 @@ export async function getSiteContent(): Promise<SiteContent> {
     supabase.from("seo_settings").select("*").single(),
     supabase.from("seo_pages").select("*"),
     supabase.from("local_seo_blocks").select("*").eq("is_active", true),
-    supabase.from("order_platforms").select("*").eq("is_active", true).order("sort_order")
+    supabase.from("order_platforms").select("*").eq("is_active", true).order("sort_order"),
+    supabase.from("page_heroes").select("*").order("page_key")
   ]);
 
   return {
@@ -61,7 +63,8 @@ export async function getSiteContent(): Promise<SiteContent> {
     seoSettings: seoSettings.data ?? fallbackContent.seoSettings,
     seoPages: seoPages.data?.length ? seoPages.data : fallbackContent.seoPages,
     localSeoBlocks: localSeoBlocks.data?.length ? localSeoBlocks.data : fallbackContent.localSeoBlocks,
-    orderPlatforms: orderPlatforms.data?.length ? orderPlatforms.data : fallbackContent.orderPlatforms
+    orderPlatforms: orderPlatforms.data?.length ? orderPlatforms.data : fallbackContent.orderPlatforms,
+    pageHeroes: pageHeroes.data?.length ? pageHeroes.data : fallbackContent.pageHeroes
   };
 }
 

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
 import { Instagram, MapPin, MessageCircle } from "lucide-react";
-import type { BrandSettings, OrderPlatform } from "@/types/content";
+import type { BrandSettings, OrderPlatform, PageHeroConfig } from "@/types/content";
 import { safeHref, whatsappUrl } from "@/lib/utils";
 import type { Lang } from "@/lib/i18n";
 import { pagePath, pick, t } from "@/lib/i18n";
@@ -134,18 +134,102 @@ export function PageShell({ brand, children, lang = "en", orderPlatforms = [] }:
   );
 }
 
-export function PageHero({ eyebrow, title, body, image }: { eyebrow: string; title: string; body?: string | null; image?: string | null }) {
+export function PageHero({
+  eyebrow,
+  title,
+  body,
+  image,
+  video,
+  overlayOpacity = 65,
+  style = "medium",
+  imagePosition = "center",
+  ctaLabel,
+  ctaUrl,
+  showCta = false
+}: {
+  eyebrow: string;
+  title: string;
+  body?: string | null;
+  image?: string | null;
+  video?: string | null;
+  overlayOpacity?: number;
+  style?: "large" | "medium" | "compact";
+  imagePosition?: string | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  showCta?: boolean;
+}) {
+  const styles = {
+    compact: {
+      section: "py-16 md:py-20",
+      title: "text-5xl md:text-6xl",
+      body: "mt-5 text-lg leading-7"
+    },
+    medium: {
+      section: "py-24 md:py-28",
+      title: "text-6xl md:text-8xl",
+      body: "mt-7 text-xl leading-8"
+    },
+    large: {
+      section: "py-36 md:py-44",
+      title: "text-7xl md:text-9xl",
+      body: "mt-8 text-2xl leading-9"
+    }
+  };
+  const selectedStyle = styles[style];
+  const overlay = Math.min(100, Math.max(0, overlayOpacity)) / 100;
+
   return (
-    <section className="relative overflow-hidden bg-ink py-28 text-seashell">
-      {image && <Image src={image} alt={title} fill priority className="object-cover opacity-35" />}
-      <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/20" />
+    <section className={`relative overflow-hidden bg-ink text-seashell ${selectedStyle.section}`}>
+      {video ? (
+        <video className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: imagePosition || "center" }} autoPlay muted loop playsInline src={video} />
+      ) : (
+        image && <Image src={image} alt={title} fill priority className="object-cover" style={{ objectPosition: imagePosition || "center" }} />
+      )}
+      <div className="absolute inset-0 bg-ink" style={{ opacity: overlay }} />
+      <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/45 to-ink/10" />
       <div className="section-shell relative">
         <p className="font-heading text-sm uppercase tracking-[0.28em] text-sand">{eyebrow}</p>
-        <h1 className="mt-5 max-w-4xl font-title text-6xl leading-none md:text-8xl">{title}</h1>
-        {body && <p className="mt-7 max-w-2xl text-xl font-light leading-8 text-white/80">{body}</p>}
+        <h1 className={`mt-5 max-w-4xl font-title leading-none ${selectedStyle.title}`}>{title}</h1>
+        {body && <p className={`max-w-2xl font-light text-white/80 ${selectedStyle.body}`}>{body}</p>}
+        {showCta && ctaLabel && (
+          <div className="mt-9">
+            <CtaLink href={ctaUrl || "/contact"} variant="light">{ctaLabel}</CtaLink>
+          </div>
+        )}
       </div>
     </section>
   );
+}
+
+export function InternalPageHero({ hero, pageKey, lang, eyebrow }: { hero?: PageHeroConfig; pageKey: string; lang: Lang; eyebrow?: string }) {
+  if (!hero?.is_enabled) return null;
+  const heroStyle = hero.hero_style || heightToStyle(hero.height);
+  if (heroStyle === "none") return null;
+  const title = pick(hero as unknown as Record<string, unknown>, "title", lang);
+  if (!title) return null;
+
+  return (
+    <PageHero
+      eyebrow={eyebrow || pageKey}
+      title={title}
+      body={pick(hero as unknown as Record<string, unknown>, "subtitle", lang)}
+      image={hero.background_image_url}
+      video={hero.background_video_url}
+      overlayOpacity={hero.overlay_opacity}
+      style={heroStyle}
+      imagePosition={hero.image_position}
+      showCta={hero.show_cta}
+      ctaLabel={pick(hero as unknown as Record<string, unknown>, "cta_label", lang)}
+      ctaUrl={hero.cta_url}
+    />
+  );
+}
+
+function heightToStyle(height?: "small" | "medium" | "large") {
+  if (height === "small") return "compact";
+  if (height === "large") return "large";
+  return "medium";
 }
 
 export function CtaLink({ href, children, variant = "dark" }: { href?: string | null; children: React.ReactNode; variant?: "dark" | "light" | "outline" | "glass" }) {

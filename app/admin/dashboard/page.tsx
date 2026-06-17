@@ -13,7 +13,7 @@ export async function getAdminData() {
     redirect("/admin/login");
   }
 
-  const [brand, hero, about, catering, offers, categories, products, gallery, events, testimonials, seoSettings, seoPages, localSeoBlocks, orderPlatforms] = await Promise.all([
+  const [brand, hero, about, catering, offers, categories, products, gallery, events, testimonials, seoSettings, seoPages, localSeoBlocks, orderPlatforms, pageHeroes] = await Promise.all([
     supabase.from("brand_settings").select("*").single(),
     supabase.from("hero_content").select("*").single(),
     supabase.from("about_content").select("*").single(),
@@ -27,7 +27,8 @@ export async function getAdminData() {
     supabase.from("seo_settings").select("*").single(),
     supabase.from("seo_pages").select("*").order("page_key"),
     supabase.from("local_seo_blocks").select("*").order("created_at", { ascending: false }),
-    supabase.from("order_platforms").select("*").order("sort_order")
+    supabase.from("order_platforms").select("*").order("sort_order"),
+    supabase.from("page_heroes").select("*").order("page_key")
   ]);
 
   return {
@@ -44,7 +45,8 @@ export async function getAdminData() {
     seoSettings: seoSettings.data ?? fallbackContent.seoSettings,
     seoPages: seoPages.data ?? [],
     localSeoBlocks: localSeoBlocks.data ?? [],
-    orderPlatforms: orderPlatforms.data ?? []
+    orderPlatforms: orderPlatforms.data ?? [],
+    pageHeroes: pageHeroes.data ?? []
   };
 }
 

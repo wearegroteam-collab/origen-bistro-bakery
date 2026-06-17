@@ -77,6 +77,32 @@ create table if not exists public.catering_content (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.page_heroes (
+  id uuid primary key default gen_random_uuid(),
+  page_key text not null unique check (page_key in ('offers', 'events', 'catering', 'about', 'contact', 'menu')),
+  is_enabled boolean not null default true,
+  background_image_url text,
+  background_video_url text,
+  title_en text,
+  title_es text,
+  subtitle_en text,
+  subtitle_es text,
+  overlay_opacity integer not null default 65 check (overlay_opacity between 0 and 100),
+  hero_style text not null default 'medium' check (hero_style in ('large', 'medium', 'compact', 'none')),
+  height text not null default 'medium' check (height in ('small', 'medium', 'large')),
+  image_position text default 'center',
+  cta_label_en text,
+  cta_label_es text,
+  cta_url text,
+  show_cta boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.page_heroes add column if not exists hero_style text not null default 'medium';
+alter table public.page_heroes drop constraint if exists page_heroes_hero_style_check;
+alter table public.page_heroes add constraint page_heroes_hero_style_check check (hero_style in ('large', 'medium', 'compact', 'none'));
+
 create table if not exists public.banners (
   id uuid primary key default gen_random_uuid(),
   slug text unique,
@@ -298,6 +324,7 @@ alter table public.brand_settings enable row level security;
 alter table public.hero_content enable row level security;
 alter table public.about_content enable row level security;
 alter table public.catering_content enable row level security;
+alter table public.page_heroes enable row level security;
 alter table public.banners enable row level security;
 alter table public.offers enable row level security;
 alter table public.categories enable row level security;
@@ -310,6 +337,7 @@ drop policy if exists "Public can read brand settings" on public.brand_settings;
 drop policy if exists "Public can read hero" on public.hero_content;
 drop policy if exists "Public can read about" on public.about_content;
 drop policy if exists "Public can read active catering" on public.catering_content;
+drop policy if exists "Public can read page heroes" on public.page_heroes;
 drop policy if exists "Public can read active banners" on public.banners;
 drop policy if exists "Public can read active offers" on public.offers;
 drop policy if exists "Public can read active categories" on public.categories;
@@ -321,6 +349,7 @@ drop policy if exists "Authenticated admins manage brand" on public.brand_settin
 drop policy if exists "Authenticated admins manage hero" on public.hero_content;
 drop policy if exists "Authenticated admins manage about" on public.about_content;
 drop policy if exists "Authenticated admins manage catering" on public.catering_content;
+drop policy if exists "Authenticated admins manage page heroes" on public.page_heroes;
 drop policy if exists "Authenticated admins manage banners" on public.banners;
 drop policy if exists "Authenticated admins manage offers" on public.offers;
 drop policy if exists "Authenticated admins manage categories" on public.categories;
@@ -333,6 +362,7 @@ create policy "Public can read brand settings" on public.brand_settings for sele
 create policy "Public can read hero" on public.hero_content for select using (true);
 create policy "Public can read about" on public.about_content for select using (true);
 create policy "Public can read active catering" on public.catering_content for select using (is_active = true);
+create policy "Public can read page heroes" on public.page_heroes for select using (true);
 create policy "Public can read active banners" on public.banners for select using (is_active = true);
 create policy "Public can read active offers" on public.offers for select using (is_active = true);
 create policy "Public can read active categories" on public.categories for select using (is_active = true);
@@ -345,6 +375,7 @@ create policy "Authenticated admins manage brand" on public.brand_settings for a
 create policy "Authenticated admins manage hero" on public.hero_content for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage about" on public.about_content for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage catering" on public.catering_content for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+create policy "Authenticated admins manage page heroes" on public.page_heroes for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage banners" on public.banners for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage offers" on public.offers for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage categories" on public.categories for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');

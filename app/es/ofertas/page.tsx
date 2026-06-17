@@ -2,7 +2,8 @@ import Image from "next/image";
 import { getSiteContent } from "@/lib/content";
 import { offerPath, pick } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/seo";
-import { CtaLink, PageHero, PageShell } from "@/components/site-chrome";
+import { CtaLink, InternalPageHero, PageShell } from "@/components/site-chrome";
+import { pageHero } from "@/lib/page-heroes";
 
 export async function generateMetadata() {
   return buildPageMetadata("offers", "es");
@@ -13,7 +14,7 @@ export default async function SpanishOffersPage() {
   const { brand, offers } = content;
   return (
     <PageShell brand={brand} lang="es" orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow="Ofertas" title="Ofertas activas de temporada" body="Especiales, combos y propuestas limitadas de Origen Bistro & Bakery." image="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=1800&q=85" />
+      <InternalPageHero hero={pageHero(content, "offers")} pageKey="offers" lang="es" eyebrow="Ofertas" />
       <section className="section-shell py-20"><div className="grid gap-7 md:grid-cols-2">
         {offers.map((offer) => (
           <article key={offer.id} className="overflow-hidden rounded-[2rem] bg-white shadow-soft">

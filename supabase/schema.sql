@@ -48,6 +48,35 @@ create table if not exists public.about_content (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.catering_content (
+  id uuid primary key default gen_random_uuid(),
+  hero_image_url text,
+  title text not null default '',
+  title_en text,
+  title_es text,
+  subtitle text,
+  subtitle_en text,
+  subtitle_es text,
+  description text,
+  description_en text,
+  description_es text,
+  image_url text,
+  gallery_urls text,
+  service_types text,
+  service_types_en text,
+  service_types_es text,
+  packages text,
+  packages_en text,
+  packages_es text,
+  cta_label text,
+  cta_label_en text,
+  cta_label_es text,
+  cta_url text,
+  whatsapp_cta text,
+  is_active boolean not null default true,
+  updated_at timestamptz not null default now()
+);
+
 create table if not exists public.banners (
   id uuid primary key default gen_random_uuid(),
   slug text unique,
@@ -268,6 +297,7 @@ on conflict (id) do nothing;
 alter table public.brand_settings enable row level security;
 alter table public.hero_content enable row level security;
 alter table public.about_content enable row level security;
+alter table public.catering_content enable row level security;
 alter table public.banners enable row level security;
 alter table public.offers enable row level security;
 alter table public.categories enable row level security;
@@ -276,9 +306,33 @@ alter table public.gallery_images enable row level security;
 alter table public.events enable row level security;
 alter table public.testimonials enable row level security;
 
+drop policy if exists "Public can read brand settings" on public.brand_settings;
+drop policy if exists "Public can read hero" on public.hero_content;
+drop policy if exists "Public can read about" on public.about_content;
+drop policy if exists "Public can read active catering" on public.catering_content;
+drop policy if exists "Public can read active banners" on public.banners;
+drop policy if exists "Public can read active offers" on public.offers;
+drop policy if exists "Public can read active categories" on public.categories;
+drop policy if exists "Public can read available products" on public.products;
+drop policy if exists "Public can read active gallery" on public.gallery_images;
+drop policy if exists "Public can read active events" on public.events;
+drop policy if exists "Public can read active testimonials" on public.testimonials;
+drop policy if exists "Authenticated admins manage brand" on public.brand_settings;
+drop policy if exists "Authenticated admins manage hero" on public.hero_content;
+drop policy if exists "Authenticated admins manage about" on public.about_content;
+drop policy if exists "Authenticated admins manage catering" on public.catering_content;
+drop policy if exists "Authenticated admins manage banners" on public.banners;
+drop policy if exists "Authenticated admins manage offers" on public.offers;
+drop policy if exists "Authenticated admins manage categories" on public.categories;
+drop policy if exists "Authenticated admins manage products" on public.products;
+drop policy if exists "Authenticated admins manage gallery" on public.gallery_images;
+drop policy if exists "Authenticated admins manage events" on public.events;
+drop policy if exists "Authenticated admins manage testimonials" on public.testimonials;
+
 create policy "Public can read brand settings" on public.brand_settings for select using (true);
 create policy "Public can read hero" on public.hero_content for select using (true);
 create policy "Public can read about" on public.about_content for select using (true);
+create policy "Public can read active catering" on public.catering_content for select using (is_active = true);
 create policy "Public can read active banners" on public.banners for select using (is_active = true);
 create policy "Public can read active offers" on public.offers for select using (is_active = true);
 create policy "Public can read active categories" on public.categories for select using (is_active = true);
@@ -290,6 +344,7 @@ create policy "Public can read active testimonials" on public.testimonials for s
 create policy "Authenticated admins manage brand" on public.brand_settings for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage hero" on public.hero_content for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage about" on public.about_content for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+create policy "Authenticated admins manage catering" on public.catering_content for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage banners" on public.banners for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage offers" on public.offers for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage categories" on public.categories for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
@@ -297,6 +352,11 @@ create policy "Authenticated admins manage products" on public.products for all 
 create policy "Authenticated admins manage gallery" on public.gallery_images for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage events" on public.events for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "Authenticated admins manage testimonials" on public.testimonials for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+drop policy if exists "Public media read" on storage.objects;
+drop policy if exists "Authenticated media insert" on storage.objects;
+drop policy if exists "Authenticated media update" on storage.objects;
+drop policy if exists "Authenticated media delete" on storage.objects;
 
 create policy "Public media read" on storage.objects for select using (bucket_id = 'origen-media');
 create policy "Authenticated media insert" on storage.objects for insert with check (bucket_id = 'origen-media' and auth.role() = 'authenticated');
@@ -455,6 +515,7 @@ values
   ('about', 'About Origen Bistro & Bakery', 'Sobre Origen Bistro & Bakery', 'Learn about Origen Bistro & Bakery in St. Catharines, Ontario.', 'Conoce la historia de Origen Bistro & Bakery en St. Catharines, Ontario.'),
   ('offers', 'Offers | Origen Bistro & Bakery', 'Ofertas | Origen Bistro & Bakery', 'Seasonal offers from Origen Bistro & Bakery.', 'Ofertas de temporada de Origen Bistro & Bakery.'),
   ('events', 'Events | Origen Bistro & Bakery', 'Eventos | Origen Bistro & Bakery', 'Bakery, brunch and coffee events in St. Catharines.', 'Eventos de bakery, brunch y cafe en St. Catharines.'),
+  ('catering', 'Catering | Origen Bistro & Bakery', 'Catering | Origen Bistro & Bakery', 'Bakery boxes, brunch catering and corporate catering in St. Catharines.', 'Bakery boxes, brunch catering y catering corporativo en St. Catharines.'),
   ('contact', 'Contact | Origen Bistro & Bakery', 'Contacto | Origen Bistro & Bakery', 'Contact and visit Origen Bistro & Bakery in St. Catharines.', 'Contacta y visita Origen Bistro & Bakery en St. Catharines.')
 on conflict (page_key) do nothing;
 
@@ -465,6 +526,13 @@ where not exists (select 1 from public.local_seo_blocks);
 alter table public.seo_settings enable row level security;
 alter table public.seo_pages enable row level security;
 alter table public.local_seo_blocks enable row level security;
+
+drop policy if exists "Public can read seo settings" on public.seo_settings;
+drop policy if exists "Public can read seo pages" on public.seo_pages;
+drop policy if exists "Public can read active local seo blocks" on public.local_seo_blocks;
+drop policy if exists "Authenticated admins manage seo settings" on public.seo_settings;
+drop policy if exists "Authenticated admins manage seo pages" on public.seo_pages;
+drop policy if exists "Authenticated admins manage local seo blocks" on public.local_seo_blocks;
 
 create policy "Public can read seo settings" on public.seo_settings for select using (true);
 create policy "Public can read seo pages" on public.seo_pages for select using (true);
@@ -493,6 +561,9 @@ values
 on conflict do nothing;
 
 alter table public.order_platforms enable row level security;
+
+drop policy if exists "Public can read active order platforms" on public.order_platforms;
+drop policy if exists "Authenticated admins manage order platforms" on public.order_platforms;
 
 create policy "Public can read active order platforms" on public.order_platforms for select using (is_active = true);
 create policy "Authenticated admins manage order platforms" on public.order_platforms for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');

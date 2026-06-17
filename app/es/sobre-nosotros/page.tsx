@@ -11,10 +11,12 @@ export async function generateMetadata() {
 export default async function SpanishAboutPage() {
   const content = await getSiteContent();
   const { brand, about } = content;
+  const title = pick(about as unknown as Record<string, unknown>, "title", "es");
   const values = (pick(about as unknown as Record<string, unknown>, "values", "es") || "").split("\n").map((value) => value.trim()).filter(Boolean);
+  const ctaLabel = pick(about as unknown as Record<string, unknown>, "cta_label", "es");
   return (
     <PageShell brand={brand} lang="es" orderPlatforms={content.orderPlatforms}>
-      <PageHero eyebrow="Sobre nosotros" title={pick(about as unknown as Record<string, unknown>, "page_title", "es") || about.title} body={pick(about as unknown as Record<string, unknown>, "preview_body", "es")} image={about.image_url} />
+      <PageHero eyebrow="Sobre nosotros" title={pick(about as unknown as Record<string, unknown>, "page_title", "es") || title} body={pick(about as unknown as Record<string, unknown>, "preview_body", "es")} image={about.image_url} />
       <section className="section-shell py-24">
         <div className="grid gap-12 md:grid-cols-[1fr_0.9fr] md:items-start">
           <div>
@@ -22,10 +24,10 @@ export default async function SpanishAboutPage() {
             <div className="mt-6 space-y-6 text-lg leading-8 text-ink/75">
               {(pick(about as unknown as Record<string, unknown>, "page_body", "es") || pick(about as unknown as Record<string, unknown>, "body", "es")).split("\n").filter(Boolean).map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
-            {about.cta_label && <div className="mt-9"><CtaLink href={about.cta_url || "/es/menu"}>{pick(about as unknown as Record<string, unknown>, "cta_label", "es")}</CtaLink></div>}
+            {ctaLabel && <div className="mt-9"><CtaLink href={about.cta_url || "/es/menu"}>{ctaLabel}</CtaLink></div>}
           </div>
           <div className="grid gap-5">
-            {about.image_url && <Image src={about.image_url} alt={about.title} width={900} height={1100} className="aspect-[4/5] rounded-[2rem] object-cover shadow-soft" />}
+            {about.image_url && <Image src={about.image_url} alt={title} width={900} height={1100} className="aspect-[4/5] rounded-[2rem] object-cover shadow-soft" />}
             {about.secondary_image_url && <Image src={about.secondary_image_url} alt="Origen Bistro & Bakery" width={900} height={700} className="aspect-[4/3] rounded-[2rem] object-cover shadow-soft" />}
           </div>
         </div>

@@ -9,12 +9,13 @@ import { slugify } from "@/lib/utils";
 
 type FieldType = "text" | "textarea" | "number" | "date" | "checkbox" | "image" | "select";
 type Field = { name: string; label: string; type?: FieldType; required?: boolean; options?: { label: string; value: string }[] };
-type SectionKey = "brand" | "hero" | "about" | "offers" | "categories" | "products" | "gallery" | "events" | "testimonials" | "seoSettings" | "seoPages" | "localSeoBlocks" | "orderPlatforms";
+type SectionKey = "brand" | "hero" | "about" | "catering" | "offers" | "categories" | "products" | "gallery" | "events" | "testimonials" | "seoSettings" | "seoPages" | "localSeoBlocks" | "orderPlatforms";
 
 const singleTables: Record<string, string> = {
   brand: "brand_settings",
   hero: "hero_content",
   about: "about_content",
+  catering: "catering_content",
   seoSettings: "seo_settings"
 };
 
@@ -38,6 +39,7 @@ const tabs: { key: SectionKey; label: string }[] = [
   { key: "products", label: "Menu" },
   { key: "gallery", label: "Galeria" },
   { key: "events", label: "Eventos" },
+  { key: "catering", label: "Catering" },
   { key: "testimonials", label: "Testimonios" },
   { key: "about", label: "Nosotros" },
   { key: "seoSettings", label: "SEO Settings" },
@@ -59,10 +61,8 @@ const fieldMap: Record<SectionKey, Field[]> = {
     { name: "instagram", label: "Instagram" },
     { name: "facebook", label: "Facebook" },
     { name: "tiktok", label: "TikTok" },
-    { name: "address", label: "Direccion", type: "textarea" },
     { name: "address_en", label: "Address EN", type: "textarea" },
     { name: "address_es", label: "Direccion ES", type: "textarea" },
-    { name: "hours", label: "Horarios", type: "textarea" },
     { name: "hours_en", label: "Hours EN", type: "textarea" },
     { name: "hours_es", label: "Horarios ES", type: "textarea" },
     { name: "google_maps_embed", label: "Google Maps embed" }
@@ -70,58 +70,75 @@ const fieldMap: Record<SectionKey, Field[]> = {
   hero: [
     { name: "media_url", label: "Imagen o video", type: "image" },
     { name: "media_type", label: "Tipo de media", type: "select", options: [{ label: "Imagen", value: "image" }, { label: "Video", value: "video" }] },
-    { name: "title", label: "Titulo", required: true },
-    { name: "title_en", label: "Title EN" },
+    { name: "title_en", label: "Titulo EN" },
     { name: "title_es", label: "Titulo ES" },
-    { name: "subtitle", label: "Subtitulo", type: "textarea", required: true },
-    { name: "subtitle_en", label: "Subtitle EN", type: "textarea" },
+    { name: "subtitle_en", label: "Subtitulo EN", type: "textarea" },
     { name: "subtitle_es", label: "Subtitulo ES", type: "textarea" },
-    { name: "primary_button_label", label: "Boton principal", required: true },
-    { name: "primary_button_label_en", label: "Primary button EN" },
+    { name: "primary_button_label_en", label: "Texto boton principal EN" },
     { name: "primary_button_label_es", label: "Boton principal ES" },
     { name: "primary_button_url", label: "Enlace principal", required: true },
-    { name: "secondary_button_label", label: "Boton secundario", required: true },
-    { name: "secondary_button_label_en", label: "Secondary button EN" },
+    { name: "secondary_button_label_en", label: "Texto boton secundario EN" },
     { name: "secondary_button_label_es", label: "Boton secundario ES" },
     { name: "secondary_button_url", label: "Enlace secundario", required: true }
   ],
   about: [
-    { name: "preview_title", label: "Titulo preview home" },
-    { name: "preview_title_en", label: "Preview title EN" },
-    { name: "preview_title_es", label: "Preview title ES" },
-    { name: "preview_body", label: "Texto preview home", type: "textarea" },
-    { name: "title", label: "Titulo base", required: true },
-    { name: "title_en", label: "Title EN" },
+    { name: "preview_title_en", label: "Titulo preview EN" },
+    { name: "preview_title_es", label: "Titulo preview ES" },
+    { name: "preview_body_en", label: "Texto preview EN", type: "textarea" },
+    { name: "preview_body_es", label: "Texto preview ES", type: "textarea" },
+    { name: "title_en", label: "Titulo EN" },
     { name: "title_es", label: "Titulo ES" },
-    { name: "body", label: "Texto base", type: "textarea", required: true },
-    { name: "page_title", label: "Titulo pagina About" },
-    { name: "page_title_en", label: "About page title EN" },
+    { name: "body_en", label: "Texto base EN", type: "textarea" },
+    { name: "body_es", label: "Texto base ES", type: "textarea" },
+    { name: "page_title_en", label: "Titulo pagina About EN" },
     { name: "page_title_es", label: "Titulo About ES" },
-    { name: "page_body", label: "Texto completo pagina About", type: "textarea" },
+    { name: "page_body_en", label: "Texto completo About EN", type: "textarea" },
+    { name: "page_body_es", label: "Texto completo About ES", type: "textarea" },
     { name: "image_url", label: "Imagen principal", type: "image" },
     { name: "secondary_image_url", label: "Imagen secundaria", type: "image" },
-    { name: "values", label: "Valores o caracteristicas (uno por linea)", type: "textarea" },
-    { name: "values_en", label: "Values EN", type: "textarea" },
+    { name: "values_en", label: "Valores EN (uno por linea)", type: "textarea" },
     { name: "values_es", label: "Valores ES", type: "textarea" },
-    { name: "cta_label", label: "Texto CTA opcional" },
+    { name: "cta_label_en", label: "Texto CTA EN" },
+    { name: "cta_label_es", label: "Texto CTA ES" },
     { name: "cta_url", label: "Enlace CTA opcional" }
   ],
+  catering: [
+    { name: "hero_image_url", label: "Hero image", type: "image" },
+    { name: "title_en", label: "Titulo EN" },
+    { name: "title_es", label: "Titulo ES" },
+    { name: "subtitle_en", label: "Subtitulo EN", type: "textarea" },
+    { name: "subtitle_es", label: "Subtitulo ES", type: "textarea" },
+    { name: "description_en", label: "Descripcion EN", type: "textarea" },
+    { name: "description_es", label: "Descripcion ES", type: "textarea" },
+    { name: "image_url", label: "Imagen principal", type: "image" },
+    { name: "gallery_urls", label: "Galeria (una URL por linea)", type: "textarea" },
+    { name: "service_types_en", label: "Tipos de servicio EN (uno por linea)", type: "textarea" },
+    { name: "service_types_es", label: "Tipos de servicio ES (uno por linea)", type: "textarea" },
+    { name: "packages_en", label: "Menus o paquetes EN (uno por linea)", type: "textarea" },
+    { name: "packages_es", label: "Menus o paquetes ES (uno por linea)", type: "textarea" },
+    { name: "cta_label_en", label: "Texto boton EN" },
+    { name: "cta_label_es", label: "Texto boton ES" },
+    { name: "cta_url", label: "CTA button URL" },
+    { name: "whatsapp_cta", label: "WhatsApp CTA opcional" },
+    { name: "is_active", label: "Activo", type: "checkbox" }
+  ],
   offers: [
-    { name: "title", label: "Titulo", required: true },
-    { name: "slug", label: "Slug editable" },
+    { name: "title_en", label: "Titulo EN" },
+    { name: "title_es", label: "Titulo ES" },
     { name: "slug_en", label: "Slug EN" },
     { name: "slug_es", label: "Slug ES" },
-    { name: "description", label: "Descripcion corta", type: "textarea" },
-    { name: "title_en", label: "Title EN" },
-    { name: "title_es", label: "Titulo ES" },
-    { name: "description_en", label: "Short description EN", type: "textarea" },
+    { name: "description_en", label: "Descripcion corta EN", type: "textarea" },
     { name: "description_es", label: "Descripcion corta ES", type: "textarea" },
-    { name: "full_description", label: "Descripcion completa", type: "textarea" },
-    { name: "conditions", label: "Condiciones", type: "textarea" },
+    { name: "full_description_en", label: "Descripcion completa EN", type: "textarea" },
+    { name: "full_description_es", label: "Descripcion completa ES", type: "textarea" },
+    { name: "conditions_en", label: "Condiciones EN", type: "textarea" },
+    { name: "conditions_es", label: "Condiciones ES", type: "textarea" },
     { name: "image_url", label: "Imagen", type: "image" },
-    { name: "button_label", label: "Texto del boton en listados" },
+    { name: "button_label_en", label: "Texto boton listado EN" },
+    { name: "button_label_es", label: "Texto boton listado ES" },
     { name: "button_url", label: "URL pagina oferta (se autocompleta)" },
-    { name: "cta_label", label: "Texto CTA pagina individual" },
+    { name: "cta_label_en", label: "Texto CTA EN" },
+    { name: "cta_label_es", label: "Texto CTA ES" },
     { name: "cta_url", label: "Destino CTA pagina individual" },
     { name: "start_date", label: "Fecha inicio", type: "date" },
     { name: "end_date", label: "Fecha fin", type: "date" },
@@ -129,19 +146,17 @@ const fieldMap: Record<SectionKey, Field[]> = {
     { name: "is_active", label: "Activo", type: "checkbox" }
   ],
   categories: [
-    { name: "name", label: "Nombre", required: true },
-    { name: "name_en", label: "Name EN" },
+    { name: "name_en", label: "Nombre EN" },
     { name: "name_es", label: "Nombre ES" },
-    { name: "slug", label: "Slug", required: true },
+    { name: "slug_en", label: "Slug EN" },
+    { name: "slug_es", label: "Slug ES" },
     { name: "sort_order", label: "Orden", type: "number" },
     { name: "is_active", label: "Activo", type: "checkbox" }
   ],
   products: [
-    { name: "name", label: "Nombre", required: true },
-    { name: "name_en", label: "Name EN" },
+    { name: "name_en", label: "Nombre EN" },
     { name: "name_es", label: "Nombre ES" },
-    { name: "description", label: "Descripcion", type: "textarea" },
-    { name: "description_en", label: "Description EN", type: "textarea" },
+    { name: "description_en", label: "Descripcion EN", type: "textarea" },
     { name: "description_es", label: "Descripcion ES", type: "textarea" },
     { name: "price", label: "Precio", type: "number", required: true },
     { name: "image_url", label: "Imagen", type: "image" },
@@ -150,43 +165,39 @@ const fieldMap: Record<SectionKey, Field[]> = {
     { name: "is_featured", label: "Destacado", type: "checkbox" }
   ],
   gallery: [
-    { name: "title", label: "Titulo" },
-    { name: "title_en", label: "Title EN" },
+    { name: "title_en", label: "Titulo EN" },
     { name: "title_es", label: "Titulo ES" },
     { name: "image_url", label: "Imagen", type: "image", required: true },
     { name: "sort_order", label: "Orden", type: "number" },
     { name: "is_active", label: "Activo", type: "checkbox" }
   ],
   events: [
-    { name: "title", label: "Titulo", required: true },
-    { name: "title_en", label: "Title EN" },
+    { name: "title_en", label: "Titulo EN" },
     { name: "title_es", label: "Titulo ES" },
-    { name: "slug", label: "Slug editable" },
     { name: "slug_en", label: "Slug EN" },
     { name: "slug_es", label: "Slug ES" },
     { name: "image_url", label: "Imagen", type: "image" },
     { name: "event_date", label: "Fecha", type: "date" },
     { name: "event_time", label: "Hora" },
-    { name: "location", label: "Ubicacion" },
-    { name: "location_en", label: "Location EN" },
+    { name: "location_en", label: "Ubicacion EN" },
     { name: "location_es", label: "Ubicacion ES" },
-    { name: "description", label: "Descripcion", type: "textarea" },
-    { name: "description_en", label: "Description EN", type: "textarea" },
+    { name: "description_en", label: "Descripcion EN", type: "textarea" },
     { name: "description_es", label: "Descripcion ES", type: "textarea" },
-    { name: "full_description", label: "Descripcion completa", type: "textarea" },
-    { name: "button_label", label: "Texto del boton en listados" },
+    { name: "full_description_en", label: "Descripcion completa EN", type: "textarea" },
+    { name: "full_description_es", label: "Descripcion completa ES", type: "textarea" },
+    { name: "button_label_en", label: "Texto boton listado EN" },
+    { name: "button_label_es", label: "Texto boton listado ES" },
     { name: "button_url", label: "URL pagina evento (se autocompleta)" },
-    { name: "cta_label", label: "Texto CTA pagina individual" },
+    { name: "cta_label_en", label: "Texto CTA EN" },
+    { name: "cta_label_es", label: "Texto CTA ES" },
     { name: "cta_url", label: "Destino CTA pagina individual" },
     { name: "is_featured", label: "Destacado en home", type: "checkbox" },
     { name: "is_active", label: "Activo", type: "checkbox" }
   ],
   testimonials: [
-    { name: "name", label: "Nombre", required: true },
-    { name: "name_en", label: "Name EN" },
+    { name: "name_en", label: "Nombre EN" },
     { name: "name_es", label: "Nombre ES" },
-    { name: "comment", label: "Comentario", type: "textarea", required: true },
-    { name: "comment_en", label: "Comment EN", type: "textarea" },
+    { name: "comment_en", label: "Comentario EN", type: "textarea" },
     { name: "comment_es", label: "Comentario ES", type: "textarea" },
     { name: "photo_url", label: "Foto", type: "image" },
     { name: "rating", label: "Calificacion", type: "number", required: true },
@@ -256,12 +267,13 @@ const fieldMap: Record<SectionKey, Field[]> = {
 };
 
 const emptyBySection: Partial<Record<SectionKey, Record<string, unknown>>> = {
-  offers: { title: "", slug: "", description: "", full_description: "", conditions: "", image_url: "", button_label: "Ver oferta", button_url: "", cta_label: "Reservar", cta_url: "/contact", start_date: "", end_date: "", is_featured: false, is_active: true },
-  categories: { name: "", slug: "", sort_order: 0, is_active: true },
-  products: { name: "", description: "", price: 0, image_url: "", category_id: "", is_available: true, is_featured: false },
-  gallery: { title: "", image_url: "", sort_order: 0, is_active: true },
-  events: { title: "", slug: "", image_url: "", event_date: "", event_time: "", location: "", description: "", full_description: "", button_label: "Ver evento", button_url: "", cta_label: "Reservar", cta_url: "/contact", is_featured: false, is_active: true },
-  testimonials: { name: "", comment: "", photo_url: "", rating: 5, is_active: true },
+  offers: { title_en: "", title_es: "", slug_en: "", slug_es: "", description_en: "", description_es: "", full_description_en: "", full_description_es: "", conditions_en: "", conditions_es: "", image_url: "", button_label_en: "View offer", button_label_es: "Ver oferta", button_url: "", cta_label_en: "Reserve", cta_label_es: "Reservar", cta_url: "/contact", start_date: "", end_date: "", is_featured: false, is_active: true },
+  categories: { name_en: "", name_es: "", slug_en: "", slug_es: "", sort_order: 0, is_active: true },
+  products: { name_en: "", name_es: "", description_en: "", description_es: "", price: 0, image_url: "", category_id: "", is_available: true, is_featured: false },
+  gallery: { title_en: "", title_es: "", image_url: "", sort_order: 0, is_active: true },
+  events: { title_en: "", title_es: "", slug_en: "", slug_es: "", image_url: "", event_date: "", event_time: "", location_en: "", location_es: "", description_en: "", description_es: "", full_description_en: "", full_description_es: "", button_label_en: "View event", button_label_es: "Ver evento", button_url: "", cta_label_en: "Reserve", cta_label_es: "Reservar", cta_url: "/contact", is_featured: false, is_active: true },
+  testimonials: { name_en: "", name_es: "", comment_en: "", comment_es: "", photo_url: "", rating: 5, is_active: true },
+  catering: { hero_image_url: "", title_en: "", title_es: "", subtitle_en: "", subtitle_es: "", description_en: "", description_es: "", image_url: "", gallery_urls: "", service_types_en: "", service_types_es: "", packages_en: "", packages_es: "", cta_label_en: "", cta_label_es: "", cta_url: "/contact", whatsapp_cta: "", is_active: true },
   seoPages: { page_key: "", index_page: true, follow_page: true },
   localSeoBlocks: { page_target: "home", heading_en: "", heading_es: "", content_en: "", content_es: "", keywords: "", is_active: true },
   orderPlatforms: { name: "", logo_url: "", order_url: "", button_text_en: "", button_text_es: "", sort_order: 0, is_active: true }
@@ -271,7 +283,7 @@ export function AdminPanel({ initialData, hasSupabase, initialSection = "brand" 
   const router = useRouter();
   const [data, setData] = useState(initialData);
   const [active, setActive] = useState<SectionKey>(initialSection);
-  const initialValue = singleTables[initialSection] ? initialData[initialSection as "brand" | "hero" | "about" | "seoSettings"] : emptyBySection[initialSection];
+  const initialValue = singleTables[initialSection] ? initialData[initialSection as "brand" | "hero" | "about" | "catering" | "seoSettings"] : emptyBySection[initialSection];
   const [form, setForm] = useState<Record<string, unknown>>(initialValue as Record<string, unknown>);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
@@ -295,7 +307,7 @@ export function AdminPanel({ initialData, hasSupabase, initialSection = "brand" 
   function openSection(section: SectionKey) {
     setActive(section);
     setMessage("");
-    const value = singleTables[section] ? data[section as "brand" | "hero" | "about" | "seoSettings"] : emptyBySection[section];
+    const value = singleTables[section] ? data[section as "brand" | "hero" | "about" | "catering" | "seoSettings"] : emptyBySection[section];
     setForm({ ...(value as Record<string, unknown>) });
   }
 
@@ -341,12 +353,7 @@ export function AdminPanel({ initialData, hasSupabase, initialSection = "brand" 
     setMessage("");
     const supabase = createSupabaseBrowserClient();
     const table = singleTables[active] ?? collectionTables[active];
-    const payload = normalizePayload(form);
-    if (active === "offers" || active === "events") {
-      const slug = String(payload.slug || slugify(String(payload.title || "")));
-      payload.slug = slug;
-      payload.button_url = payload.button_url || `/${active}/${slug}`;
-    }
+    const payload = normalizePayload(form, active);
     const query = payload.id ? supabase.from(table).update(payload).eq("id", payload.id) : supabase.from(table).insert(payload);
     const { error } = await query;
 
@@ -522,10 +529,64 @@ function FieldControl({ field, value, onChange, onUpload, disabled }: { field: F
   );
 }
 
-function normalizePayload(form: Record<string, unknown>) {
-  return Object.fromEntries(
+function normalizePayload(form: Record<string, unknown>, section: SectionKey) {
+  const payload = Object.fromEntries(
     Object.entries(form)
       .filter(([key]) => key !== "category")
       .map(([key, value]) => [key, value === "" ? null : value])
   );
+
+  const localized = (field: string) => firstText(payload[`${field}_en`], payload[`${field}_es`], payload[field]);
+
+  if (["brand", "hero", "about", "catering", "offers", "events", "categories", "products", "gallery", "testimonials"].includes(section)) {
+    const fieldsBySection: Partial<Record<SectionKey, string[]>> = {
+      brand: ["address", "hours"],
+      hero: ["title", "subtitle", "primary_button_label", "secondary_button_label"],
+      about: ["preview_title", "preview_body", "title", "body", "page_title", "page_body", "values", "cta_label"],
+      catering: ["title", "subtitle", "description", "service_types", "packages", "cta_label"],
+      offers: ["title", "description", "full_description", "conditions", "button_label", "cta_label"],
+      events: ["title", "location", "description", "full_description", "button_label", "cta_label"],
+      categories: ["name"],
+      products: ["name", "description"],
+      gallery: ["title"],
+      testimonials: ["name", "comment"]
+    };
+
+    fieldsBySection[section]?.forEach((field) => {
+      payload[field] = localized(field) || fallbackTextFor(section, field);
+    });
+  }
+
+  if (section === "offers" || section === "events") {
+    const title = firstText(payload.title_en, payload.title_es, payload.title);
+    payload.slug_en = firstText(payload.slug_en, slugify(String(firstText(payload.title_en, title) || "")));
+    payload.slug_es = firstText(payload.slug_es, slugify(String(firstText(payload.title_es, title) || "")));
+    payload.slug = firstText(payload.slug, payload.slug_en, payload.slug_es);
+    payload.button_url = firstText(payload.button_url, `/${section}/${payload.slug}`);
+  }
+
+  if (section === "categories") {
+    const name = firstText(payload.name_en, payload.name_es, payload.name, "category");
+    payload.name = name;
+    payload.slug_en = firstText(payload.slug_en, slugify(String(firstText(payload.name_en, name))));
+    payload.slug_es = firstText(payload.slug_es, slugify(String(firstText(payload.name_es, name))));
+    payload.slug = firstText(payload.slug, payload.slug_en, payload.slug_es, slugify(String(name)));
+  }
+
+  return payload;
+}
+
+function firstText(...values: unknown[]) {
+  return values.map((value) => String(value || "").trim()).find(Boolean) || "";
+}
+
+function fallbackTextFor(section: SectionKey, field: string) {
+  if (section === "hero" && field === "title") return "Origen Bistro & Bakery";
+  if (section === "hero" && field === "subtitle") return "Artisan bakery and bistro in St. Catharines.";
+  if (section === "hero" && field === "primary_button_label") return "Reserve";
+  if (section === "hero" && field === "secondary_button_label") return "View menu";
+  if (field === "title") return "Untitled";
+  if (field === "name") return "Untitled";
+  if (field === "comment") return "Pending comment";
+  return null;
 }

@@ -186,6 +186,34 @@ export type AboutContent = {
   cta_url?: string | null;
 };
 
+export type CateringContent = {
+  id?: string;
+  hero_image_url?: string | null;
+  title?: string | null;
+  title_en?: string | null;
+  title_es?: string | null;
+  subtitle?: string | null;
+  subtitle_en?: string | null;
+  subtitle_es?: string | null;
+  description?: string | null;
+  description_en?: string | null;
+  description_es?: string | null;
+  image_url?: string | null;
+  gallery_urls?: string | null;
+  service_types?: string | null;
+  service_types_en?: string | null;
+  service_types_es?: string | null;
+  packages?: string | null;
+  packages_en?: string | null;
+  packages_es?: string | null;
+  cta_label?: string | null;
+  cta_label_en?: string | null;
+  cta_label_es?: string | null;
+  cta_url?: string | null;
+  whatsapp_cta?: string | null;
+  is_active: boolean;
+};
+
 export type SeoSettings = {
   id?: string;
   site_title_en?: string | null;
@@ -259,6 +287,7 @@ export type SiteContent = {
   brand: BrandSettings;
   hero: HeroContent;
   about: AboutContent;
+  catering: CateringContent;
   offers: Offer[];
   categories: Category[];
   products: Product[];

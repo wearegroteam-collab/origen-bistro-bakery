@@ -13,10 +13,11 @@ export async function getAdminData() {
     redirect("/admin/login");
   }
 
-  const [brand, hero, about, offers, categories, products, gallery, events, testimonials, seoSettings, seoPages, localSeoBlocks, orderPlatforms] = await Promise.all([
+  const [brand, hero, about, catering, offers, categories, products, gallery, events, testimonials, seoSettings, seoPages, localSeoBlocks, orderPlatforms] = await Promise.all([
     supabase.from("brand_settings").select("*").single(),
     supabase.from("hero_content").select("*").single(),
     supabase.from("about_content").select("*").single(),
+    supabase.from("catering_content").select("*").maybeSingle(),
     supabase.from("offers").select("*").order("is_featured", { ascending: false }).order("created_at", { ascending: false }),
     supabase.from("categories").select("*").order("sort_order"),
     supabase.from("products").select("*, category:categories(*)").order("created_at", { ascending: false }),
@@ -33,6 +34,7 @@ export async function getAdminData() {
     brand: brand.data ?? fallbackContent.brand,
     hero: hero.data ?? fallbackContent.hero,
     about: about.data ?? fallbackContent.about,
+    catering: catering.data ?? fallbackContent.catering,
     offers: offers.data ?? [],
     categories: categories.data ?? [],
     products: products.data ?? [],

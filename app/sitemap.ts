@@ -6,7 +6,7 @@ import { siteUrl } from "@/lib/seo";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const content = await getSiteContent();
   const base = siteUrl();
-  const pageKeys = ["home", "menu", "about", "offers", "events", "contact"];
+  const pageKeys = ["home", "menu", "about", "offers", "events", "catering", "contact"];
   const pages = pageKeys.flatMap((key) => [
     { url: `${base}${pagePath(key, "en")}`, alternates: { languages: { "en-CA": `${base}${pagePath(key, "en")}`, "es-CA": `${base}${pagePath(key, "es")}`, "x-default": `${base}${pagePath(key, "en")}` } } },
     { url: `${base}${pagePath(key, "es")}`, alternates: { languages: { "en-CA": `${base}${pagePath(key, "en")}`, "es-CA": `${base}${pagePath(key, "es")}`, "x-default": `${base}${pagePath(key, "en")}` } } }

@@ -50,6 +50,30 @@ export const fallbackContent: SiteContent = {
     cta_label: "Ver menu",
     cta_url: "/menu"
   },
+  catering: {
+    hero_image_url: "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1800&q=85",
+    title: "Catering by Origen",
+    title_en: "Catering by Origen",
+    title_es: "Catering de Origen",
+    subtitle: "Bakery boxes, brunch spreads and bistro-style catering for thoughtful gatherings.",
+    subtitle_en: "Bakery boxes, brunch spreads and bistro-style catering for thoughtful gatherings.",
+    subtitle_es: "Bakery boxes, brunch y catering estilo bistro para reuniones especiales.",
+    description: "Bring the warmth of Origen to meetings, celebrations and private events across St. Catharines and Niagara. We prepare polished bakery boxes, brunch tables, coffee service and seasonal menus with the same boutique care as our dining room.",
+    description_en: "Bring the warmth of Origen to meetings, celebrations and private events across St. Catharines and Niagara. We prepare polished bakery boxes, brunch tables, coffee service and seasonal menus with the same boutique care as our dining room.",
+    description_es: "Lleva la calidez de Origen a reuniones, celebraciones y eventos privados en St. Catharines y Niagara. Preparamos bakery boxes, mesas de brunch, servicio de cafe y menus de temporada con el mismo cuidado boutique de nuestra sala.",
+    image_url: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=1200&q=85",
+    gallery_urls: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=85\nhttps://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85",
+    service_types_en: "Corporate breakfasts\nBrunch gatherings\nBakery boxes\nPrivate celebrations\nCoffee service",
+    service_types_es: "Desayunos corporativos\nReuniones de brunch\nBakery boxes\nCelebraciones privadas\nServicio de cafe",
+    packages_en: "Morning pastry box\nSignature brunch table\nCoffee and sweets service\nSeasonal bistro menu",
+    packages_es: "Caja de pasteleria de manana\nMesa brunch signature\nServicio de cafe y dulces\nMenu bistro de temporada",
+    cta_label: "Request catering",
+    cta_label_en: "Request catering",
+    cta_label_es: "Solicitar catering",
+    cta_url: "/contact",
+    whatsapp_cta: "19050001224",
+    is_active: true
+  },
   offers: [
     {
       id: "seed-offer",

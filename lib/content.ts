@@ -12,6 +12,7 @@ export async function getSiteContent(): Promise<SiteContent> {
     brand,
     hero,
     about,
+    catering,
     offers,
     categories,
     products,
@@ -26,6 +27,7 @@ export async function getSiteContent(): Promise<SiteContent> {
     supabase.from("brand_settings").select("*").single(),
     supabase.from("hero_content").select("*").single(),
     supabase.from("about_content").select("*").single(),
+    supabase.from("catering_content").select("*").eq("is_active", true).maybeSingle(),
     supabase
       .from("offers")
       .select("*")
@@ -49,6 +51,7 @@ export async function getSiteContent(): Promise<SiteContent> {
     brand: brand.data ?? fallbackContent.brand,
     hero: hero.data ?? fallbackContent.hero,
     about: about.data ?? fallbackContent.about,
+    catering: catering.data ?? fallbackContent.catering,
     offers: offers.data?.length ? offers.data : fallbackContent.offers,
     categories: categories.data?.length ? categories.data : fallbackContent.categories,
     products: products.data?.length ? products.data : fallbackContent.products,

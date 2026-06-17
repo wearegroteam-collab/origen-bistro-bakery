@@ -8,6 +8,7 @@ export const labels = {
     menu: "Menu",
     offers: "Offers",
     events: "Events",
+    catering: "Catering",
     about: "About",
     contact: "Contact",
     reserve: "Reserve",
@@ -28,13 +29,17 @@ export const labels = {
     orderOnline: "Order Online",
     order: "Order",
     choosePlatform: "Choose your preferred delivery platform",
-    orderFavourites: "Order your favourites online"
+    orderFavourites: "Order your favourites online",
+    cateringEyebrow: "Catering",
+    cateringServices: "Services",
+    cateringPackages: "Menus and packages"
   },
   es: {
     home: "Inicio",
     menu: "Menu",
     offers: "Ofertas",
     events: "Eventos",
+    catering: "Catering",
     about: "Sobre nosotros",
     contact: "Contacto",
     reserve: "Reservar",
@@ -55,7 +60,10 @@ export const labels = {
     orderOnline: "Ordenar",
     order: "Ordenar",
     choosePlatform: "Elige tu plataforma de pedido",
-    orderFavourites: "Ordena tus favoritos online"
+    orderFavourites: "Ordena tus favoritos online",
+    cateringEyebrow: "Catering",
+    cateringServices: "Servicios",
+    cateringPackages: "Menus y paquetes"
   }
 };
 
@@ -65,9 +73,9 @@ export function t(lang: Lang) {
 
 export function pick<T extends Record<string, unknown>>(item: T, field: string, lang: Lang) {
   const localized = item[`${field}_${lang}`];
-  const english = item[`${field}_en`];
+  const fallback = item[`${field}_${lang === "en" ? "es" : "en"}`];
   const base = item[field];
-  return String(localized || english || base || "");
+  return String(localized || fallback || base || "");
 }
 
 export function localizedSlug(item: { slug?: string | null; slug_en?: string | null; slug_es?: string | null; id: string }, lang: Lang) {
@@ -81,6 +89,7 @@ export function pagePath(key: string, lang: Lang) {
     about: { en: "/about", es: "/es/sobre-nosotros" },
     offers: { en: "/offers", es: "/es/ofertas" },
     events: { en: "/events", es: "/es/eventos" },
+    catering: { en: "/catering", es: "/es/catering" },
     contact: { en: "/contact", es: "/es/contacto" }
   };
   return paths[key]?.[lang] || "/";

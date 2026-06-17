@@ -7,6 +7,7 @@ import { safeHref, whatsappUrl } from "@/lib/utils";
 import type { Lang } from "@/lib/i18n";
 import { pagePath, pick, t } from "@/lib/i18n";
 import { OrderOnlineButton, OrderOnlineProvider } from "@/components/order-online";
+import { MobileNav } from "@/components/mobile-nav";
 
 function navItems(lang: Lang) {
   const copy = t(lang);
@@ -15,6 +16,7 @@ function navItems(lang: Lang) {
     { label: copy.menu, href: pagePath("menu", lang) },
     { label: copy.offers, href: pagePath("offers", lang) },
     { label: copy.events, href: pagePath("events", lang) },
+    { label: copy.catering, href: pagePath("catering", lang) },
     { label: copy.about, href: pagePath("about", lang) },
     { label: copy.contact, href: pagePath("contact", lang) }
   ];
@@ -32,19 +34,22 @@ export function SiteHeader({ brand, lang = "en", orderPlatforms = [] }: { brand:
             <span className="font-title text-3xl text-ink">Origen</span>
           )}
         </Link>
-        <nav className="hidden items-center gap-7 text-sm font-medium text-ink/70 md:flex">
+        <nav className="hidden items-center gap-6 text-sm font-medium text-ink/70 lg:flex">
           {navItems(lang).map((item) => (
             <Link key={item.href} href={item.href} className="transition hover:text-ink">
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2 text-xs font-bold">
+        <div className="hidden items-center gap-2 text-xs font-bold lg:flex">
           <Link href="/" className={lang === "en" ? "text-ink" : "text-ink/40"}>EN</Link>
           <span className="text-ink/25">/</span>
           <Link href={alternateHome} className={lang === "es" ? "text-ink" : "text-ink/40"}>ES</Link>
         </div>
-        <OrderOnlineButton platforms={orderPlatforms} lang={lang} />
+        <div className="hidden lg:block">
+          <OrderOnlineButton platforms={orderPlatforms} lang={lang} />
+        </div>
+        <MobileNav items={navItems(lang)} lang={lang} orderPlatforms={orderPlatforms} />
       </div>
     </header>
   );
